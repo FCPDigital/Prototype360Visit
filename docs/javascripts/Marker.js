@@ -22,7 +22,7 @@ Marker.prototype = {
 			x: this.data.x, 
 			y: this.data.y
 		}
-		this.target = "/images/360/"+this.data.url;
+		this.target = "images/360/"+this.data.url;
 	},
 
 	display: function(){

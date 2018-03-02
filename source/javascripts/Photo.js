@@ -137,17 +137,17 @@ PhotoManager.prototype = {
 			requestAnimationFrame(this.render.bind(this));// enregistre la fonction pour un appel récurrent 
 		}
 
-		if( this.autoRotate && this.lonSpeed == 0){
+		if( this.autoRotate && this.lonSpeed == 0 && !this.bManualControl){
 			this.lon += 0.05;
 		}
 
-	    if( Math.abs(this.lonSpeed ) > 0.5 ){
+	    if( Math.abs(this.lonSpeed ) > 0.5 && !this.bManualControl){
 	    	this.lonSpeed *= 0.95
 	    } else {
 	    	this.lonSpeed = 0;
 	    }
 
-	    // this.lon += this.lonSpeed;
+	    this.lon += this.lonSpeed;
 
 	    // limitation de la latitude entre -85 et 85 (impossible de voir le ciel ou vos pieds)
 	    this.lat = Math.max(-85, Math.min(85, this.lat));
