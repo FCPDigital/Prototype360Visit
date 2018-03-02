@@ -25,8 +25,12 @@ Marker.prototype = {
 		this.target = "images/360/"+this.data.url;
 	},
 
-	display: function(){
+	updateStyle: function(){
 		this.el.setAttribute("style", this.style);
+	},
+
+	display: function(){
+		this.updateStyle();
 		this.el.classList.add("marker--display");
 	},
 	

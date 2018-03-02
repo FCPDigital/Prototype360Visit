@@ -25,8 +25,12 @@ Marker.prototype = {
 		this.target = "images/360/"+this.data.url;
 	},
 
-	display: function(){
+	updateStyle: function(){
 		this.el.setAttribute("style", this.style);
+	},
+
+	display: function(){
+		this.updateStyle();
 		this.el.classList.add("marker--display");
 	},
 	
@@ -85,6 +89,11 @@ function PhotoManager(mapManager) {
 	document.addEventListener("mousedown", this.onDocumentMouseDown.bind(this), false);
 	document.addEventListener("mousemove", this.onDocumentMouseMove.bind(this), false);
 	document.addEventListener("mouseup", this.onDocumentMouseUp.bind(this), false);
+
+
+	document.addEventListener("touchstart", this.onDocumentMouseDown.bind(this), false);
+	document.addEventListener("touchmove", this.onDocumentMouseMove.bind(this), false);
+	document.addEventListener("touchend", this.onDocumentMouseUp.bind(this), false);
 }
 
 
@@ -211,16 +220,27 @@ PhotoManager.prototype = {
 	    this.renderer.render(this.scene, this.camera);
 	},
 
+	homogeneiseEvent: function(event){
+		return event.touches && event.touches.length ? {
+			x: event.touches[0].clientX,
+			y: event.touches[0].clientY
+		} : {
+			x: event.clientX,
+			y: event.clientY
+		};
+	},
 
 	onDocumentMouseDown: function(event) {
 	    event.preventDefault();
+	    var coord = this.homogeneiseEvent(event);
+
 
 	    this.autoRotate = false;
 
 	    this.bManualControl = true;
 
-	    this.savedX = event.clientX;
-	    this.savedY = event.clientY;
+	    this.savedX = coord.x;
+	    this.savedY = coord.y;
 
 	    this.savedLongitude = this.lon;
 	    this.savedLatitude = this.lat;
@@ -228,14 +248,13 @@ PhotoManager.prototype = {
 
 	onDocumentMouseMove: function(event){
 	    // mise à jour si mode manuel
-
-
+	    var coord = this.homogeneiseEvent(event);
 	    if(this.bManualControl)
 	    {
 
-	    	this.lonSpeed = ((this.savedX - event.clientX) / window.innerWidth) * Math.PI * 2 * 4;
-	        this.lon = (this.savedX - event.clientX) * 0.1 + this.savedLongitude;
-	        this.lat = (event.clientY - this.savedY) * 0.1 + this.savedLatitude;
+	    	this.lonSpeed = ((this.savedX - coord.x) / window.innerWidth) * Math.PI * 2 * 4;
+	        this.lon = (this.savedX - coord.x) * 0.1 + this.savedLongitude;
+	        this.lat = (coord.y - this.savedY) * 0.1 + this.savedLatitude;
 	    }
 	},
 
