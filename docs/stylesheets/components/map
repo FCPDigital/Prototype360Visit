@@ -85,3 +85,11 @@ body {
         transform: scale(0.9); }
       .map__nav-item--active {
         color: black; }
+
+@media screen and (max-width: 650px) {
+  .map {
+    width: 100vw;
+    height: 100vw; }
+
+  .map__nav {
+    display: none; } }

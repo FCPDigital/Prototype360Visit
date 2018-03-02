@@ -39,7 +39,8 @@
     width: 25%;
     min-width: 300px;
     max-width: 400px;
-    color: white; }
+    color: white;
+    z-index: 999; }
     .photo__sidebar--display {
       transform: translateX(0); }
     .photo__sidebar-close {

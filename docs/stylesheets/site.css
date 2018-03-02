@@ -188,6 +188,13 @@ body {
       .map__nav-item--active {
         color: black; }
 
+@media screen and (max-width: 650px) {
+  .map {
+    width: 100vw;
+    height: 100vw; }
+
+  .map__nav {
+    display: none; } }
 .photo {
   position: fixed;
   top: 0;
@@ -237,7 +244,8 @@ body {
     width: 25%;
     min-width: 300px;
     max-width: 400px;
-    color: white; }
+    color: white;
+    z-index: 999; }
     .photo__sidebar--display {
       -webkit-transform: translateX(0);
               transform: translateX(0); }
