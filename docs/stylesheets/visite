@@ -1,0 +1,13 @@
+.visite__title {
+  position: fixed;
+  top: 30px;
+  left: 30px; }
+.visite__util {
+  position: absolute;
+  top: 30px;
+  right: 30px; }
+.visite__body {
+  opacity: 1;
+  transition: opacity 1s; }
+  .visite__body--hide {
+    opacity: 0; }

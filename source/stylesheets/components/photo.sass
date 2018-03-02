@@ -1,0 +1,94 @@
+.photo
+	
+	position: fixed
+	top: 0
+	left: 0
+	width: 100%
+	height: 100vh
+	z-index: -1
+	
+	&__thumbnail-back
+		position: absolute
+		top: 0
+		left: 0
+		width: 100px
+		height: 100px
+		background-image: image-url("plan.jpg")
+		background-size: contain
+		background-repeat: no-repeat
+		background-position: center
+		transform: translateY(-100px)
+		transition: .5s
+		z-index: 5
+		background-color: white
+		cursor: zoom-out
+		&--display
+			transform: translateY(0)
+
+	&__canvas
+		opacity: 0
+		transition: 1s
+		cursor: move
+
+
+	&__sidebar
+		position: fixed
+		height: 100vh
+		background-color: rgba(0, 0, 0, .7)
+		padding: 30px
+		top: 0
+		right: 0
+		transition: .5s ease-in-out
+		transform: translateX(100%)
+		box-sizing: border-box
+		width: 25%
+		min-width: 300px
+		max-width: 400px
+		color: white
+		&--display
+			transform: translateX(0)
+
+		&-close
+			position: absolute
+			top: 10px
+			left: 10px
+			color: white
+			width: 50px
+			height: 50px
+			background-color: transparent
+			border: 0
+			cursor: pointer
+			transition: all .4s
+			&--reverse
+				left: -60px
+				transform: rotate(180deg)
+			i 
+				font-size: 40px
+
+
+
+		&-body
+
+		&-title
+			margin: 30px 0 20px 0
+			letter-spacing: 0
+			font-weight: bold
+			color: white
+			text-align: left
+		
+		&-content
+			font-weight: 100
+			line-height: 1.5
+			letter-spacing: 0px
+
+	&--loading
+		z-index: 1
+		opacity: 1
+
+	&--display
+		z-index: 1
+
+		
+		.photo__canvas
+			opacity: 1
+
