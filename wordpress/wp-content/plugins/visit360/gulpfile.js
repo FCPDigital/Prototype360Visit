@@ -26,6 +26,7 @@ gulp.task('js:watch', function () {
 });
 
 var scripts = [
+  "vendor/three.min.js",
   "_dev/javascripts/Marker.js",
   "_dev/javascripts/Photo.js",
   "_dev/javascripts/Map.js",

@@ -21,6 +21,7 @@ class Visit360 {
 		add_action( 'init', array($this, "generatePostType") );
 		$this->registerShortcodes();
 		$this->registerFields();
+		$this->registerAssets();
 
 	}
 
@@ -68,6 +69,26 @@ class Visit360 {
 				$this, "shortcode_visit" 
 			)
 		);
+	}
+
+	public function registerAssets()
+	{
+		add_action('init', 'register_script');
+		function register_script() {
+			// wp_register_script( 'visit360_scripts', plugins_url('/vendor/three.min.js', __FILE__), array('jquery'), '2.5.1' );
+		    wp_register_script( 'visit360_scripts', plugins_url('/assets/visit360.js', __FILE__), array('jquery'), '2.5.1' );
+
+
+		    wp_register_style( 'visit360_style', plugins_url('/assets/visit360.css', __FILE__), false, '1.0.0', 'all');
+		}
+
+		// use the registered jquery and style above
+		add_action('wp_enqueue_scripts', 'enqueue_style');
+
+		function enqueue_style(){
+		   wp_enqueue_script('visit360_scripts');
+		   wp_enqueue_style( 'visit360_style' );
+		}
 	}
 
 	public function registerFields()

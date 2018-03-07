@@ -10,6 +10,7 @@ function MapItem(el, manager) {
 	this.manager = manager;
 	this.markers = [];
 	this.mode = REGULAR
+	this.imageUrl = this.el.getAttribute("data-url");
 
 	this.width = this.el.offsetWidth;
 	this.height = this.el.offsetHeight;
@@ -58,7 +59,7 @@ MapItem.prototype = {
 		this.el.classList.remove("map--select")
 		this.el.classList.add("map--top")
 		this.hideMarkers();
-		this.el.style = "";
+		this.cleanPosition();
 		this.mode = TOP
 	},
 
@@ -67,9 +68,11 @@ MapItem.prototype = {
 		this.el.classList.remove("map--select")
 		this.el.classList.add("map--bottom")
 		this.hideMarkers();
-		this.el.style = "";
+		this.cleanPosition();
 		this.mode = BOTTOM
 	},
+
+
 
 	toRegular: function(){
 		this.setPosition();
@@ -92,7 +95,7 @@ MapItem.prototype = {
 
 			this.el.className = "map map--select"
 				
-			this.el.style = "";
+			this.cleanPosition();
 			this.mode = SELECT
 			this.fade(false);
 			this.displayMarkers();
@@ -123,12 +126,16 @@ MapItem.prototype = {
 		}
 	},
 
-	setPosition(translate) {
-		if( translate ) this.translate = translate; 
-		this.el.style.transform = `translateX(-50%) translateY(-50%) rotateX(75deg) rotateZ(10deg) translateZ(${this.translate}px)`
+	cleanPosition: function(){
+		this.el.style = `background-image: url("${this.imageUrl}");`;
 	},
 
-	fade(isFade){
+	setPosition: function(translate) {
+		if( translate ) this.translate = translate; 
+		this.el.style = `transform: translateX(-50%) translateY(-50%) rotateX(75deg) rotateZ(10deg) translateZ(${this.translate}px); background-image: url("${this.imageUrl}");`
+	},
+
+	fade: function(isFade){
 		if( isFade ){
 			this.el.classList.add("map--fade");
 		} else {

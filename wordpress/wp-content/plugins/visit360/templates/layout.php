@@ -19,7 +19,9 @@
 
       <?php foreach ($maps as $key => $map) { ?>
 
-        <div id="<?php echo $map->id ?>" class="map">
+        <div id="<?php echo $map->id ?>" 
+          class="map" 
+          data-url="<?php echo $map->img; ?>">
           <div class="marker__container">
             <?php foreach($map->markers as $key => $marker) { ?>
               <span class="marker" data-marker='<?php echo $marker; ?>'></span>
@@ -31,11 +33,10 @@
   
   
   </div>
-  
 
 
   <!-- Photo Frame -->
-  <div class="single-marker photo">
+  <div class="photo single-marker">
     <div class="photo__thumbnail-back"></div>
     <canvas id="photo" class="photo__canvas"></canvas>
 
