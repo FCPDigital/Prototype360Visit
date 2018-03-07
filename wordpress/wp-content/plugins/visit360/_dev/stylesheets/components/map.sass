@@ -1,0 +1,113 @@
+$width: 450px
+$height: 450px
+$step: 70px
+
+body 
+	height: 100vh
+	overflow: hidden
+
+.map
+	background-image: image-url("plan.svg")
+	background-repeat: no-repeat
+	background-position: center
+	background-size: 400px
+	width: $width
+	height: $height
+	// box-shadow: 5px 10px 15px rgba(0, 0, 0, .2)
+	transition: all .5s
+	position: absolute
+	top: 0
+	left: 0
+	cursor: crosshair
+	transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(0px)
+
+	&--top
+		transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(1000px)
+
+	&--bottom
+		transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(-1000px)
+
+	&--select
+		transform: translateX(-50%) translateY(-50%) rotateX(0deg) rotateZ(0deg) translateZ(0)
+
+	
+	&--fade
+		opacity: 0.4
+
+	&__close 
+		position: absolute
+		top: 0
+		right: 0
+		width: 50px
+		height: 50px
+		border: 0
+		background: transparent
+		opacity: 0
+		pointer-events: none
+		transition: .5s
+		transform: translateY(20px)
+		&--display
+			opacity: 1
+			pointer-events: all
+			transform: translateY(0)
+
+		&:hover
+			background-color: #EEE
+		i
+			font-size: 30px
+			color: black
+
+	&__container
+		perpsective: 1000px
+		position: absolute
+		top: 50%
+		left: 50%
+		width: 0
+		height: 0
+
+
+	&__nav
+		right: 5vh
+		top: 10vh
+		height: 90vh
+		font-size: 14px
+		width: 150px
+		display: flex
+		flex-direction: column
+		justify-content: center
+		
+		&-item
+			font-weight: normal
+			text-align: center
+			padding: 20px 0
+			position: relative
+			transition: .4s
+			color: black
+			transform: scale(1)
+			cursor: pointer
+
+			&:not(:last-child)
+				margin-bottom: $step
+				&::after
+					content: ""
+					display: block
+					width: 1px
+					height: $step
+					background-color: black
+					position: absolute
+					left: 50%
+					top: 100%
+			
+			&--disable
+				color: #DDD
+				transform: scale(0.9)
+
+			&--active
+				color: black
+
+@media screen and (max-width: 650px)
+	.map 
+		width: 100vw
+		height: 100vw
+	.map__nav
+		display: none

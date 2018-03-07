@@ -1,0 +1,249 @@
+* {
+  font-family: "Roboto";
+  padding: 0;
+  margin: 0; }
+
+.marker {
+  display: block;
+  position: absolute;
+  transform: translateZ(20px) translateX(-50%) translateY(-50%) scale(0);
+  border-radius: 100%;
+  transform-style: preserve-3d;
+  background-color: #000;
+  transition: all 1s;
+  width: 15px;
+  height: 15px;
+  animation-duration: 3s;
+  animation-delay: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  opacity: 0;
+  cursor: zoom-in; }
+  .marker::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    border: 2px solid #000;
+    width: 25px;
+    height: 25px;
+    border-radius: 100%;
+    transition: .3s; }
+  .marker--display {
+    opacity: 1;
+    transform: translateZ(20px) translateX(-50%) translateY(-50%) scale(1); }
+    .marker--display:hover {
+      transform: translateZ(20px) translateX(-50%) translateY(-50%) scale(1.3); }
+  .marker--zoom {
+    animation: none !important;
+    width: 200vw !important;
+    height: 200vw !important;
+    top: 50% !important;
+    left: 50% !important;
+    background-color: #000 !important;
+    transform: scale(1) translateX(-50%) translateY(-50%) !important; }
+    .marker--zoom::after {
+      display: none; }
+
+@keyframes bounce {
+  0% {
+    width: 15px;
+    height: 15px; }
+  50% {
+    width: 26px;
+    height: 26px; }
+  100% {
+    width: 15px;
+    height: 15px; } }
+
+body {
+  height: 100vh;
+  overflow: hidden; }
+
+.map {
+  background-image: image-url("plan.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 400px;
+  width: 450px;
+  height: 450px;
+  transition: all .5s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: crosshair;
+  transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(0px); }
+  .map--top {
+    transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(1000px); }
+  .map--bottom {
+    transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(-1000px); }
+  .map--select {
+    transform: translateX(-50%) translateY(-50%) rotateX(0deg) rotateZ(0deg) translateZ(0); }
+  .map--fade {
+    opacity: 0.4; }
+  .map__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    border: 0;
+    background: transparent;
+    opacity: 0;
+    pointer-events: none;
+    transition: .5s;
+    transform: translateY(20px); }
+    .map__close--display {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0); }
+    .map__close:hover {
+      background-color: #EEE; }
+    .map__close i {
+      font-size: 30px;
+      color: black; }
+  .map__container {
+    perpsective: 1000px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0; }
+  .map__nav {
+    right: 5vh;
+    top: 10vh;
+    height: 90vh;
+    font-size: 14px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; }
+    .map__nav-item {
+      font-weight: normal;
+      text-align: center;
+      padding: 20px 0;
+      position: relative;
+      transition: .4s;
+      color: black;
+      transform: scale(1);
+      cursor: pointer; }
+      .map__nav-item:not(:last-child) {
+        margin-bottom: 70px; }
+        .map__nav-item:not(:last-child)::after {
+          content: "";
+          display: block;
+          width: 1px;
+          height: 70px;
+          background-color: black;
+          position: absolute;
+          left: 50%;
+          top: 100%; }
+      .map__nav-item--disable {
+        color: #DDD;
+        transform: scale(0.9); }
+      .map__nav-item--active {
+        color: black; }
+
+@media screen and (max-width: 650px) {
+  .map {
+    width: 100vw;
+    height: 100vw; }
+  .map__nav {
+    display: none; } }
+
+.photo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1; }
+  .photo__thumbnail-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background-image: image-url("plan.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translateY(-100px);
+    transition: .5s;
+    z-index: 5;
+    background-color: white;
+    cursor: zoom-out; }
+    .photo__thumbnail-back--display {
+      transform: translateY(0); }
+  .photo__canvas {
+    opacity: 0;
+    transition: 1s;
+    cursor: move; }
+  .photo__sidebar {
+    position: fixed;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    top: 0;
+    right: 0;
+    transition: .5s ease-in-out;
+    transform: translateX(100%);
+    box-sizing: border-box;
+    width: 25%;
+    min-width: 300px;
+    max-width: 400px;
+    color: white;
+    z-index: 999; }
+    .photo__sidebar--display {
+      transform: translateX(0); }
+    .photo__sidebar-close {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      width: 50px;
+      height: 50px;
+      background-color: transparent;
+      border: 0;
+      cursor: pointer;
+      transition: all .4s; }
+      .photo__sidebar-close--reverse {
+        left: -60px;
+        transform: rotate(180deg); }
+      .photo__sidebar-close i {
+        font-size: 40px; }
+    .photo__sidebar-title {
+      margin: 30px 0 20px 0;
+      letter-spacing: 0;
+      font-weight: bold;
+      color: white;
+      text-align: left; }
+    .photo__sidebar-content {
+      font-weight: 100;
+      line-height: 1.5;
+      letter-spacing: 0px; }
+  .photo--loading {
+    z-index: 1;
+    opacity: 1; }
+  .photo--display {
+    z-index: 1; }
+    .photo--display .photo__canvas {
+      opacity: 1; }
+
+.visite__title {
+  position: fixed;
+  top: 30px;
+  left: 30px; }
+
+.visite__util {
+  position: absolute;
+  top: 30px;
+  right: 30px; }
+
+.visite__body {
+  opacity: 1;
+  transition: opacity 1s; }
+  .visite__body--hide {
+    opacity: 0; }
