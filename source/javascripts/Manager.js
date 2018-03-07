@@ -24,7 +24,7 @@ function MapManager(el) {
 MapManager.prototype = {
 
 	config: {
-		step: 100,
+		step: 150,
 		offset: 50
 	},
 
