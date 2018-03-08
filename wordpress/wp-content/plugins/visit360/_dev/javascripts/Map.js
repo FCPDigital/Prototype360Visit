@@ -12,8 +12,8 @@ function MapItem(el, manager) {
 	this.mode = REGULAR
 	this.imageUrl = this.el.getAttribute("data-url");
 
-	this.width = this.el.offsetWidth;
-	this.height = this.el.offsetHeight;
+	this._width = this.el.offsetWidth;
+	this._height = this.el.offsetHeight;
 
 	var markers = this.el.querySelectorAll(".marker");
 
@@ -25,6 +25,16 @@ function MapItem(el, manager) {
 }
 
 MapItem.prototype = {
+
+	get width(){
+		return this._width;
+		// return this.manager.isResponsive ? window.innerWidth : this._width;
+	},
+
+	get height(){
+		return this._height;
+		// return this.manager.isResponsive ? window.innerHeight : this._height;
+	},
 
 	initEvents: function(){
 		for(var i=0; i<this.markers.length; i++){
@@ -38,7 +48,6 @@ MapItem.prototype = {
 			self.openPhoto(marker);
 		}, false)
 	},
-
 
 	openPhoto: function(marker){
 		marker.zoom();
@@ -72,8 +81,6 @@ MapItem.prototype = {
 		this.mode = BOTTOM
 	},
 
-
-
 	toRegular: function(){
 		this.setPosition();
 		if( this.mode == SELECT ){
@@ -104,6 +111,18 @@ MapItem.prototype = {
 		}
 	},
 
+	refreshBoundaries: function(){
+		this._width = this.el.offsetWidth;
+		this._height = this.el.offsetHeight;
+		console.log(this._width);
+	},
+
+	refreshMarkerPositions: function(){
+		this.refreshBoundaries();
+		for(var i=0; i<this.markers.length; i++){
+			this.markers[i].updateStyle();
+		}
+	},
 
 	hideMarkers: function() {
 		for(var i=0; i<this.markers.length; i++){
@@ -132,7 +151,7 @@ MapItem.prototype = {
 
 	setPosition: function(translate) {
 		if( translate ) this.translate = translate; 
-		this.el.style = `transform: translateX(-50%) translateY(-50%) rotateX(75deg) rotateZ(10deg) translateZ(${this.translate}px); background-image: url("${this.imageUrl}");`
+		this.el.style = `transform: translateX(-50%) translateY(-50%) rotateX(75deg) rotateZ(10deg) scale(0.9) translateZ(${this.translate}px); background-image: url("${this.imageUrl}");`
 	},
 
 	fade: function(isFade){

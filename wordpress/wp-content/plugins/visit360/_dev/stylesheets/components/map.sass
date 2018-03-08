@@ -1,15 +1,12 @@
 $width: 450px
 $height: 450px
 $step: 70px
-
-body 
-	height: 100vh
-	overflow: hidden
+$navWidth: 150px
 
 .map
 	background-repeat: no-repeat
 	background-position: center
-	background-size: 400px
+	background-size: 100%
 	width: $width
 	height: $height
 	// box-shadow: 5px 10px 15px rgba(0, 0, 0, .2)
@@ -18,16 +15,16 @@ body
 	top: 0
 	left: 0
 	cursor: crosshair
-	transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(0px)
+	transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(0px)  scale(1)
 
 	&--top
-		transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(1000px)
+		transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(1000px) scale(1)
 
 	&--bottom
-		transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(-1000px)
+		transform: translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(-1000px) scale(1)
 
 	&--select
-		transform: translateX(-50%) translateY(-50%) rotateX(0deg) rotateZ(0deg) translateZ(0)
+		transform: translateX(-50%) translateY(-50%) rotateX(0deg) rotateZ(0deg) translateZ(0) scale(1)
 
 	
 	&--fade
@@ -66,15 +63,30 @@ body
 
 
 	&__nav
-		right: 5vh
-		top: 10vh
-		height: 90vh
+		top: 0
+		right: 0
+		height: 100%
+		position: absolute
 		font-size: 14px
-		width: 150px
+		width: $navWidth
 		display: flex
 		flex-direction: column
 		justify-content: center
-		
+		z-index: 2
+
+		&--responsive 
+			width: 100%
+			height: 100px
+			bottom: 0
+			top: auto
+			right: auto
+			left: 0
+			flex-direction: row
+			.map__nav-item
+				padding: 0 20px 
+				&::after
+					display: none !important
+
 		&-item
 			font-weight: normal
 			text-align: center
@@ -106,7 +118,5 @@ body
 
 @media screen and (max-width: 650px)
 	.map 
-		width: 100vw
-		height: 100vw
-	.map__nav
-		display: none
+		width: 300px
+		height: 300px

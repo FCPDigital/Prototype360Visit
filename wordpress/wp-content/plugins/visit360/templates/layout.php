@@ -2,7 +2,7 @@
 <div class="visite">
   <!-- Maps -->
 
-  <div class="visite__body">
+  <div class="visite__archive">
     
     <div class="visite__util ">
       <button id="close-map-button" class="map__close"><i class="material-icons">close</i></button>

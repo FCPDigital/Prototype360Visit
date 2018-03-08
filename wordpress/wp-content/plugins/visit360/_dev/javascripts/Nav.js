@@ -1,4 +1,6 @@
 function NavMap (manager) {
+
+	this.el = manager.el.querySelector(".map__nav");
 	this.items = manager.el.querySelectorAll(".map__nav-item");
 
 	for(var i=0; i<this.items.length; i++){
@@ -20,6 +22,14 @@ NavMap.prototype = {
 				self.manager.select(rank);
 			}
 		})
+	},
+
+	responsive: function(){
+		this.el.classList.add("map__nav--responsive");
+	},
+
+	desktop: function(){
+		this.el.classList.remove("map__nav--responsive");
 	},
 	
 	selectFromMap: function(map){

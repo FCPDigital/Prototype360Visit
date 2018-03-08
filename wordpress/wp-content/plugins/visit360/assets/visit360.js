@@ -1073,7 +1073,7 @@ PhotoManager.prototype = {
 
 			setTimeout((function(){
 				this.mapManager.currentMap.currentMarker.unzoom();
-				this.mapManager.visiteBody.classList.add("visite__body--hide");
+				this.mapManager.container.classList.add("visite__archive--hide");
 			}).bind(this), 1000)
 
 		}).bind(this), 1000)
@@ -1091,7 +1091,7 @@ PhotoManager.prototype = {
 		this.backBtn.classList.remove("photo__thumbnail-back--display");
 		setTimeout((function(){
 			this.el.classList.remove("photo--display"); 
-			this.mapManager.visiteBody.classList.remove("visite__body--hide");
+			this.mapManager.container.classList.remove("visite__archive--hide");
 		}).bind(this), 600)
 	},
 
@@ -1204,8 +1204,8 @@ function MapItem(el, manager) {
 	this.mode = REGULAR
 	this.imageUrl = this.el.getAttribute("data-url");
 
-	this.width = this.el.offsetWidth;
-	this.height = this.el.offsetHeight;
+	this._width = this.el.offsetWidth;
+	this._height = this.el.offsetHeight;
 
 	var markers = this.el.querySelectorAll(".marker");
 
@@ -1217,6 +1217,16 @@ function MapItem(el, manager) {
 }
 
 MapItem.prototype = {
+
+	get width(){
+		return this._width;
+		// return this.manager.isResponsive ? window.innerWidth : this._width;
+	},
+
+	get height(){
+		return this._height;
+		// return this.manager.isResponsive ? window.innerHeight : this._height;
+	},
 
 	initEvents: function(){
 		for(var i=0; i<this.markers.length; i++){
@@ -1230,7 +1240,6 @@ MapItem.prototype = {
 			self.openPhoto(marker);
 		}, false)
 	},
-
 
 	openPhoto: function(marker){
 		marker.zoom();
@@ -1264,8 +1273,6 @@ MapItem.prototype = {
 		this.mode = BOTTOM
 	},
 
-
-
 	toRegular: function(){
 		this.setPosition();
 		if( this.mode == SELECT ){
@@ -1296,6 +1303,18 @@ MapItem.prototype = {
 		}
 	},
 
+	refreshBoundaries: function(){
+		this._width = this.el.offsetWidth;
+		this._height = this.el.offsetHeight;
+		console.log(this._width);
+	},
+
+	refreshMarkerPositions: function(){
+		this.refreshBoundaries();
+		for(var i=0; i<this.markers.length; i++){
+			this.markers[i].updateStyle();
+		}
+	},
 
 	hideMarkers: function() {
 		for(var i=0; i<this.markers.length; i++){
@@ -1324,7 +1343,7 @@ MapItem.prototype = {
 
 	setPosition: function(translate) {
 		if( translate ) this.translate = translate; 
-		this.el.style = `transform: translateX(-50%) translateY(-50%) rotateX(75deg) rotateZ(10deg) translateZ(${this.translate}px); background-image: url("${this.imageUrl}");`
+		this.el.style = `transform: translateX(-50%) translateY(-50%) rotateX(75deg) rotateZ(10deg) scale(0.9) translateZ(${this.translate}px); background-image: url("${this.imageUrl}");`
 	},
 
 	fade: function(isFade){
@@ -1338,6 +1357,8 @@ MapItem.prototype = {
 }
 
 function NavMap (manager) {
+
+	this.el = manager.el.querySelector(".map__nav");
 	this.items = manager.el.querySelectorAll(".map__nav-item");
 
 	for(var i=0; i<this.items.length; i++){
@@ -1359,6 +1380,14 @@ NavMap.prototype = {
 				self.manager.select(rank);
 			}
 		})
+	},
+
+	responsive: function(){
+		this.el.classList.add("map__nav--responsive");
+	},
+
+	desktop: function(){
+		this.el.classList.remove("map__nav--responsive");
 	},
 	
 	selectFromMap: function(map){
@@ -1386,18 +1415,12 @@ function MapManager(el) {
 	this.el = el; 
 	this.maps = [];
 	this.photoManager = new PhotoManager(this);
-	this.visiteBody = this.el.querySelector(".visite__body");
+	this.container = this.el.querySelector(".visite__archive");
 	this.closeMapButton = this.el.querySelector("#close-map-button");
 	this.nav = new NavMap(this);
+	this.isResponsive = false; 
 
-	var maps = this.el.querySelectorAll(".map"); 
-
-	for(var i=0; i<maps.length; i++){
-		this.maps.push(new MapItem(maps[i], this));
-	}
-
-	this.initEvents();
-	this.regular();
+	this.init();
 } 
 
 
@@ -1406,41 +1429,10 @@ MapManager.prototype = {
 
 	config: {
 		step: 150,
-		offset: 50
-	},
-
-	initEvents: function(){
-		var self = this;
-		for(var i=0; i<this.maps.length; i++){
-			this.initEvent(this.maps[i], i);
-		}
-
-		this.closeMapButton.addEventListener("click", function(){
-			self.regular();
-			for(var i=0; i<self.maps.length; i++){
-				self.maps[i].toRegular();
-			}
-		})
-	},
-
-	initEvent: function(map, rank){
-		var self = this; 
-
-		map.el.addEventListener("mouseenter", function(){
-			if( self.mode != "map"){
-				self.focus(rank);	
-			}
-		})
-
-		map.el.addEventListener("mouseleave", function(){
-			if( self.mode != "map") {
-				self.regular();	
-			}
-		})
-
-		map.el.addEventListener("click", function(){
-			self.select(rank);
-		})
+		navWidth: 150,
+		offset: 10,
+		width: 500,
+		height: 500
 	},
 
 	getMapRankFromId: function(id){
@@ -1452,14 +1444,13 @@ MapManager.prototype = {
 		return null;
 	},
 
-
 	regular: function(){
 		
 		var n = this.maps.length;
 		var h = n - 1 * this.config.step; 
 
 		for(var i = 0; i < this.maps.length; i++){
-			this.maps[i].setPosition(-1*i * this.config.step - h/2 + this.config.offset);
+			this.maps[i].setPosition(-1*i * this.config.step - h/2 + this.offset);
 			this.maps[i].fade(false);
 		}
 		this.currentMap = null;
@@ -1487,7 +1478,7 @@ MapManager.prototype = {
 			} else {
 				this.maps[i].fade(true);
 			}
-			this.maps[i].setPosition(-1*i * this.config.step - h/2 + this.config.offset + decal);
+			this.maps[i].setPosition(-1*i * this.config.step - h/2 + this.offset + decal);
 		}
 		this.mode = "focus";
 	},
@@ -1508,6 +1499,110 @@ MapManager.prototype = {
 
 		this.nav.selectFromMap(this.currentMap);
 		this.closeMapButton.classList.add("map__close--display");
+	},
+
+	get height(){
+		var offset = 0;
+		if( this.isResponsive ){
+			offset = 100;
+		}
+		return this.maps.length * this.config.height * 0.2 + (this.maps.length - 1) * this.config.step + offset; 
+	},
+
+	get offset(){
+		return this.isResponsive ? this.config.offset + 50 : this.config.offset;
+	},
+
+
+	////////////////////////////////
+	//
+	//		Responsive
+	//
+	////////////////////////////////
+
+	responsive: function(){
+		this.isResponsive = true; 
+		this.nav.responsive();
+	},
+
+	desktop: function(){
+		this.isResponsive = false; 
+		this.nav.desktop();
+	},
+
+	updateBoundaries: function(){
+		var w = this.el.offsetWidth; 
+		if( w < this.config.width + this.config.navWidth ) {
+			this.responsive();
+		} else {
+			this.desktop();
+		}
+
+		switch (this.mode){
+			case "regular": this.regular(); break;
+			case "focus": this.focus(); break;
+			case "map": setTimeout(this.currentMap.refreshMarkerPositions.bind(this.currentMap), 1000); break;
+		}
+
+
+		this.container.style.height = this.height + "px";
+	},
+
+
+	////////////////////////////////
+	//
+	//		Initialisation
+	//
+	////////////////////////////////
+
+
+	initEvent: function(map, rank){
+		var self = this; 
+
+		map.el.addEventListener("mouseenter", function(){
+			if( self.mode != "map"){
+				self.focus(rank);	
+			}
+		})
+
+		map.el.addEventListener("mouseleave", function(){
+			if( self.mode != "map") {
+				self.regular();	
+			}
+		})
+
+		map.el.addEventListener("click", function(){
+			self.select(rank);
+		})
+	},
+
+	initEvents: function(){
+		var self = this;
+		for(var i=0; i<this.maps.length; i++){
+			this.initEvent(this.maps[i], i);
+		}
+
+		this.closeMapButton.addEventListener("click", function(){
+			self.regular();
+			for(var i=0; i<self.maps.length; i++){
+				self.maps[i].toRegular();
+			}
+		})
+
+		window.addEventListener("resize", self.updateBoundaries.bind(this));
+	},
+
+
+	init: function(){
+		var maps = this.el.querySelectorAll(".map"); 	
+		for(var i=0; i<maps.length; i++){
+			this.maps.push(new MapItem(maps[i], this));
+		}
+
+		this.updateBoundaries();
+	
+		this.initEvents();
+		this.regular();
 	}
 }
 

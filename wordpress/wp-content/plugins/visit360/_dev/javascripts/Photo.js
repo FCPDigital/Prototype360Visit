@@ -101,7 +101,7 @@ PhotoManager.prototype = {
 
 			setTimeout((function(){
 				this.mapManager.currentMap.currentMarker.unzoom();
-				this.mapManager.visiteBody.classList.add("visite__body--hide");
+				this.mapManager.container.classList.add("visite__archive--hide");
 			}).bind(this), 1000)
 
 		}).bind(this), 1000)
@@ -119,7 +119,7 @@ PhotoManager.prototype = {
 		this.backBtn.classList.remove("photo__thumbnail-back--display");
 		setTimeout((function(){
 			this.el.classList.remove("photo--display"); 
-			this.mapManager.visiteBody.classList.remove("visite__body--hide");
+			this.mapManager.container.classList.remove("visite__archive--hide");
 		}).bind(this), 600)
 	},
 
