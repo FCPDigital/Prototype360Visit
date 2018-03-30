@@ -439,7 +439,7 @@ MapItem.prototype = {
 
 	setPosition(translate) {
 		if( translate ) this.translate = translate; 
-		this.el.style.transform = `translateX(-50%) translateY(-50%) rotateX(80deg) rotateZ(10deg) translateZ(${this.translate}px)`
+		this.el.style.transform = `translateX(-50%) translateY(-50%) rotateX(75deg) rotateZ(10deg) translateZ(${this.translate}px)`
 	},
 
 	fade(isFade){
@@ -478,7 +478,7 @@ function MapManager(el) {
 MapManager.prototype = {
 
 	config: {
-		step: 100,
+		step: 150,
 		offset: 50
 	},
 

@@ -90,9 +90,9 @@ body {
   background-image: url(../images/plan.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
-  width: 500px;
-  height: 500px;
+  background-size: 400px;
+  width: 450px;
+  height: 450px;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
   position: absolute;
